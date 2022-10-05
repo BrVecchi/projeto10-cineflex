@@ -1,38 +1,41 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Filmes() {
     const [filmes, setFilmes] = useState([])
+    const [idFilme, setIdFilme] = useState(undefined)
+    console.log(idFilme)
+    
     useEffect(() => {
-    console.log(filmes)
     const URLFILMES = "https://mock-api.driven.com.br/api/v5/cineflex/movies"
     const promise = axios.get(URLFILMES)
 
     promise.then((res)=>setFilmes(res.data))
     }, [])
 
+    function salvarId(filme) {
+      const novoIdFilme = filme.id
+      setIdFilme(novoIdFilme)
+    }
   return (
     <FilmesPage>
       <span>Selecione o Filme</span>
       <FilmesContainer>
         {filmes.map((filme) => 
         <Filme>
+            <Link onClick={()=>{salvarId(filme)}} to="/filme">
           <img
             src={filme.posterURL}
             alt={`imagem do filme ${filme.title}`}
           />
+          </Link>
         </Filme>)}
       </FilmesContainer>
     </FilmesPage>
   );
 }
-const FilmesContainer = styled.ul`
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  align-items: center;
-`;
 
 const FilmesPage = styled.div`
   display: flex;
@@ -46,6 +49,13 @@ const FilmesPage = styled.div`
     letter-spacing: 0.04em;
     color: #293845;
   }
+`;
+
+const FilmesContainer = styled.ul`
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
 `;
 
 const Filme = styled.div`
