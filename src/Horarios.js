@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Horarios() {
@@ -34,7 +34,9 @@ export default function Horarios() {
             </Data>
             <Horas>
               {day.showtimes.map((showtime) => (
+                <Link to={`/sessao/${showtime.id}`}>
                 <Hora>{showtime.name}</Hora>
+                </Link>
               ))}
             </Horas>
           </Horario>
@@ -43,7 +45,9 @@ export default function Horarios() {
           <Imagem>
             <img src={filme.posterURL} alt={`imagem do filme ${filme.title}`} />
           </Imagem>
-          <span>{filme.title}</span>
+          <div>
+          <p>{filme.title}</p>
+          </div>
         </Filme>
       </HorariosContainer>
     </HorariosPage>
@@ -117,30 +121,41 @@ const Hora = styled.button`
 `;
 
 const Filme = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   background-color: #dfe6ed;
   position: fixed;
   bottom: 0px;
   left: 0px;
-  width: 375px;
   height: 117px;
-  img {
-    width: 100%;
-    height: 100%;
-    padding: 8px;
-  }
-  span {
-    font-size: 26px;
-    color: #293845;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    p {
+      margin-left: 14px;
+      font-size: 26px;
+      color: #293845;
+    font-family: "Roboto", sans-serif;
+
+    }
   }
 `;
 
 const Imagem = styled.div`
   width: 64px;
   height: 89px;
+  min-width: 64px;
+  min-height: 89px;
   margin-left: 10px;
   background: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 2px;
+  img {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+  }
 `;
