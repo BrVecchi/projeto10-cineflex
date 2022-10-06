@@ -8,7 +8,9 @@ export default function Assentos() {
   const [movie, setMovie] = useState({});
   const [day, setDay] = useState({});
   const [seats, setSeats] = useState([]);
+  const [assentosMarcados, setAssentosMarcados] = useState([])
   const { sessaoId } = useParams();
+  console.log(assentosMarcados)
 
   useEffect(() => {
     const promise = axios.get(
@@ -27,14 +29,24 @@ export default function Assentos() {
     });
   }, []);
 
+  function selecionarAssento (seat) {
+    if (!assentosMarcados.includes(seat)){
+      const novoAssentosMarcados = [...assentosMarcados, seat]
+      setAssentosMarcados(novoAssentosMarcados)
+    } else {
+      const novoAssentosMarcados = assentosMarcados.filter((assentoMarcado) => assentoMarcado !== seat)
+      setAssentosMarcados(novoAssentosMarcados)
+    }
+  }
+
   return (
     <AssentosPage>
       <span>Selecione o(s) Assento(s)</span>
       <AssentosContainer>
         <Lugares>
           {seats.map((seat) =>
-            seat.isAvailable ? (
-              <LugarVazio>{seat.name}</LugarVazio>
+            seat.isAvailable ? (assentosMarcados.includes(seat)) ? (<LugarMarcado onClick={()=>selecionarAssento(seat)}>{seat.name}</LugarMarcado>) : (
+              <LugarVazio onClick={()=>selecionarAssento(seat)}>{seat.name}</LugarVazio>
             ) : (
               <LugarOcupado>{seat.name}</LugarOcupado>
             )
@@ -124,7 +136,6 @@ const Filme = styled.div`
     }
   }
 `;
-
 const Imagem = styled.div`
   width: 64px;
   height: 89px;
@@ -146,11 +157,10 @@ const Lugares = styled.ul`
   display: flex;
   flex-wrap: wrap;
 `;
-
 const LugarVazio = styled.li`
   width: 26px;
   height: 26px;
-  background: #c3cfd9;
+  background: #C3CFD9;
   border: 1px solid #7b8b99;
   border-radius: 12px;
   font-family: "Roboto", sans-serif;
@@ -158,7 +168,17 @@ const LugarVazio = styled.li`
   margin: 4px;
   margin-bottom: 12px;
 `;
-
+const LugarMarcado = styled.li`
+  width: 26px;
+  height: 26px;
+  background: #1AAE9E;
+  border: 1px solid #0E7D71;
+  border-radius: 12px;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  margin: 4px;
+  margin-bottom: 12px;
+`;
 const LugarOcupado = styled.li`
   width: 26px;
   height: 26px;
@@ -184,7 +204,6 @@ const Legenda = styled.div`
     align-items: center;
   }
 `;
-
 const BolaAzul = styled.div`
   width: 26px;
   height: 26px;
@@ -211,7 +230,6 @@ const Inputs = styled.ul`
   width: 100%;
   margin: 23px;
 `;
-
 const Nome = styled.li`
   width: 100%;
   font-size: 18px;
@@ -239,7 +257,6 @@ const Nome = styled.li`
     font-family: "Roboto", sans-serif;
   }
 `;
-
 const Cpf = styled.li`
   width: 100%;
   font-size: 18px;
@@ -267,7 +284,6 @@ const Cpf = styled.li`
     font-family: "Roboto", sans-serif;
   }
 `;
-
 const Reservar = styled.button`
   width: 225px;
   height: 42px;
