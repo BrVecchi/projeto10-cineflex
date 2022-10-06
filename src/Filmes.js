@@ -5,8 +5,6 @@ import styled from "styled-components";
 
 export default function Filmes() {
     const [filmes, setFilmes] = useState([])
-    const [idFilme, setIdFilme] = useState(undefined)
-    console.log(idFilme)
     
     useEffect(() => {
     const URLFILMES = "https://mock-api.driven.com.br/api/v5/cineflex/movies"
@@ -15,17 +13,13 @@ export default function Filmes() {
     promise.then((res)=>setFilmes(res.data))
     }, [])
 
-    function salvarId(filme) {
-      const novoIdFilme = filme.id
-      setIdFilme(novoIdFilme)
-    }
   return (
     <FilmesPage>
       <span>Selecione o Filme</span>
       <FilmesContainer>
         {filmes.map((filme) => 
         <Filme>
-            <Link onClick={()=>{salvarId(filme)}} to="/filme">
+            <Link to={`/filme/${filme.id}`}>
           <img
             src={filme.posterURL}
             alt={`imagem do filme ${filme.title}`}

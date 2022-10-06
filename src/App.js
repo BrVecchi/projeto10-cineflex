@@ -17,7 +17,7 @@ export default function App() {
       </Head>
       <Routes>
         <Route path="/" element={<Filmes />} />
-        <Route path="/filme" element={<Horarios />} />
+        <Route path="/filme/:filmeId" element={<Horarios />} />
         <Route path="/sessao" element={<Assentos />} />
         <Route path="/sucesso" element={<Confirmacao />} />
       </Routes>

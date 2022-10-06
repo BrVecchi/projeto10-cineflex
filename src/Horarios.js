@@ -1,38 +1,49 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Horarios() {
+  const [filme, setFilme] = useState({});
+  const [days, setDays] = useState([]);
+  const { filmeId } = useParams();
+
+  useEffect(() => {
+    const promise = axios.get(
+      `https://mock-api.driven.com.br/api/v5/cineflex/movies/${filmeId}/showtimes`
+    );
+
+    promise.then((res) => {
+      setFilme(res.data);
+      setDays(res.data.days);
+    });
+
+    promise.catch((err) => {
+      console.log(err.response.data);
+    });
+  }, []);
+
   return (
     <HorariosPage>
       <span>Selecione o Horário</span>
       <HorariosContainer>
-        <Horario>
-          <Data>Quinta-feira - 24/06/2021</Data>
-          <Horas>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-          </Horas>
-        </Horario>
-        <Horario>
-          <Data>Quinta-feira - 24/06/2021</Data>
-          <Horas>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-            <Hora>15:00</Hora>
-          </Horas>
-        </Horario>
+        {days.map((day) => (
+          <Horario>
+            <Data>
+              {day.weekday} - {day.date}
+            </Data>
+            <Horas>
+              {day.showtimes.map((showtime) => (
+                <Hora>{showtime.name}</Hora>
+              ))}
+            </Horas>
+          </Horario>
+        ))}
         <Filme>
           <Imagem>
-            <img
-              src={
-                "https://s2.glbimg.com/2yK3rTPvEDofzpusIhAgrkasz9A=/e.glbimg.com/og/ed/f/original/2019/09/30/oriontree_fairbairn_960.jpg"
-              }
-              alt={`imagem do filme`}
-            />
+            <img src={filme.posterURL} alt={`imagem do filme ${filme.title}`} />
           </Imagem>
-          <span>Nome do Filme</span>
+          <span>{filme.title}</span>
         </Filme>
       </HorariosContainer>
     </HorariosPage>
