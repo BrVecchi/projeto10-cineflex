@@ -29,7 +29,6 @@ export default function Assentos() {
     });
 
     promise.catch((err) => {
-      console.log(err.response.data);
     });
   }, []);
 
@@ -81,16 +80,16 @@ export default function Assentos() {
           {seats.map((seat) =>
             seat.isAvailable ? (
               assentosMarcados.includes(seat) ? (
-                <LugarMarcado onClick={() => selecionarAssento(seat)}>
+                <LugarMarcado key={seat.id} onClick={() => selecionarAssento(seat)}>
                   {seat.name}
                 </LugarMarcado>
               ) : (
-                <LugarVazio onClick={() => selecionarAssento(seat)}>
+                <LugarVazio key={seat.id} onClick={() => selecionarAssento(seat)}>
                   {seat.name}
                 </LugarVazio>
               )
             ) : (
-              <LugarOcupado>{seat.name}</LugarOcupado>
+              <LugarOcupado key={seat.id}>{seat.name}</LugarOcupado>
             )
           )}
         </Lugares>

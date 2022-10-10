@@ -1,20 +1,20 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import styled from "styled-components";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useHistory, useLocation, useNavigate} from "react-router-dom";
 import Assentos from "./Assentos";
 import Confirmacao from "./Confirmacao";
 import Filmes from "./Filmes";
 import GlobalStyle from "./GlobalStyle";
 import Horarios from "./Horarios";
 import ResetCSS from "./ResetCSS";
+import Cabecalho from "./Cabecalho";
 
 export default function App() {
+
   return (
     <BrowserRouter>
       <ResetCSS />
       <GlobalStyle />
-      <Head>
-        <h1>CINEFLEX</h1>
-      </Head>
+      <Cabecalho/>
       <Routes>
         <Route path="/" element={<Filmes />} />
         <Route path="/filme/:filmeId" element={<Horarios />} />
@@ -25,19 +25,3 @@ export default function App() {
   );
 }
 
-const Head = styled.div`
-  width: 100%;
-  height: 67px;
-  background-color: #c3cfd9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  right: 0;
-  h1 {
-    color: #e8833a;
-    font-family: "Roboto", sans-serif;
-    font-size: 34px;
-  }
-`;

@@ -19,7 +19,6 @@ export default function Horarios() {
     });
 
     promise.catch((err) => {
-      console.log(err.response.data);
     });
   }, []);
 
@@ -27,14 +26,14 @@ export default function Horarios() {
     <HorariosPage>
       <span>Selecione o Horário</span>
       <HorariosContainer>
-        {days.map((day) => (
-          <Horario>
+        {days.map((day, i) => (
+          <Horario key={i}>
             <Data>
               {day.weekday} - {day.date}
             </Data>
             <Horas>
-              {day.showtimes.map((showtime) => (
-                <Link to={`/sessao/${showtime.id}`}>
+              {day.showtimes.map((showtime, ident) => (
+                <Link key={ident} to={`/sessao/${showtime.id}`}>
                 <Hora>{showtime.name}</Hora>
                 </Link>
               ))}

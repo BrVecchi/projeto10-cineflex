@@ -17,8 +17,8 @@ export default function Filmes() {
     <FilmesPage>
       <span>Selecione o Filme</span>
       <FilmesContainer>
-        {filmes.map((filme) => 
-        <Filme>
+        {filmes.map((filme, i) => 
+        <Filme key={i}>
             <Link to={`/filme/${filme.id}`}>
           <img
             src={filme.posterURL}

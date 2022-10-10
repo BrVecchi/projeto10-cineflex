@@ -57,8 +57,8 @@ export default function Confirmacao() {
         </Informacao>
         <Informacao>
           <span>Ingressos</span>
-          {assentos.split(",").map((assento) => (
-            <p>Assento {assento}</p>
+          {assentos.split(",").map((assento, i) => (
+            <p key={i}>Assento {assento}</p>
           ))}
         </Informacao>
         <Informacao>
