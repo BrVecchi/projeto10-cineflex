@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Assentos() {
@@ -8,9 +8,13 @@ export default function Assentos() {
   const [movie, setMovie] = useState({});
   const [day, setDay] = useState({});
   const [seats, setSeats] = useState([]);
-  const [assentosMarcados, setAssentosMarcados] = useState([])
+  const [assentosMarcados, setAssentosMarcados] = useState([]);
+  const [nome, setNome] = useState("");
+  const [cpf, setCpf] = useState("");
   const { sessaoId } = useParams();
-  console.log(assentosMarcados)
+  const navigate = useNavigate()
+  console.log(nome);
+  console.log(cpf);
 
   useEffect(() => {
     const promise = axios.get(
@@ -29,14 +33,38 @@ export default function Assentos() {
     });
   }, []);
 
-  function selecionarAssento (seat) {
-    if (!assentosMarcados.includes(seat)){
-      const novoAssentosMarcados = [...assentosMarcados, seat]
-      setAssentosMarcados(novoAssentosMarcados)
+  function selecionarAssento(seat) {
+    if (!assentosMarcados.includes(seat)) {
+      const novoAssentosMarcados = [...assentosMarcados, seat];
+      setAssentosMarcados(novoAssentosMarcados);
     } else {
-      const novoAssentosMarcados = assentosMarcados.filter((assentoMarcado) => assentoMarcado !== seat)
-      setAssentosMarcados(novoAssentosMarcados)
+      const novoAssentosMarcados = assentosMarcados.filter(
+        (assentoMarcado) => assentoMarcado !== seat
+      );
+      setAssentosMarcados(novoAssentosMarcados);
     }
+  }
+
+  function fazerReserva(event) {
+    event.preventDefault();
+    const ids = assentosMarcados.map((seat) => seat.id)
+    const request = axios.post(
+      "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
+        ids: ids,
+        name: nome,
+        cpf: cpf
+      }
+    );
+    request.then(()=>{
+      alert("Assento reservado!")
+      setAssentosMarcados([])
+      setNome("");
+      setCpf("");
+      navigate("/sucesso")
+    })
+    request.catch(()=>{
+      alert("Algo errado ocorreu, tente novamente mais tarde!")
+    })
   }
 
   return (
@@ -45,8 +73,16 @@ export default function Assentos() {
       <AssentosContainer>
         <Lugares>
           {seats.map((seat) =>
-            seat.isAvailable ? (assentosMarcados.includes(seat)) ? (<LugarMarcado onClick={()=>selecionarAssento(seat)}>{seat.name}</LugarMarcado>) : (
-              <LugarVazio onClick={()=>selecionarAssento(seat)}>{seat.name}</LugarVazio>
+            seat.isAvailable ? (
+              assentosMarcados.includes(seat) ? (
+                <LugarMarcado onClick={() => selecionarAssento(seat)}>
+                  {seat.name}
+                </LugarMarcado>
+              ) : (
+                <LugarVazio onClick={() => selecionarAssento(seat)}>
+                  {seat.name}
+                </LugarVazio>
+              )
             ) : (
               <LugarOcupado>{seat.name}</LugarOcupado>
             )
@@ -66,17 +102,33 @@ export default function Assentos() {
             <p>Indisponível</p>
           </div>
         </Legenda>
-        <Inputs>
-          <Nome>
-            <p>Nome do Comprador</p>
-            <input placeholder="Digite seu nome.." />
-          </Nome>
-          <Cpf>
-            <p>CPF do Comprador</p>
-            <input placeholder="Digite seu CPF.." />
-          </Cpf>
-        </Inputs>
-        <Reservar>Reservar Assento(s)</Reservar>
+          <Form onSubmit={fazerReserva}>
+            <Nome>
+              <label htmlFor="nome">Nome do Comprador</label>
+              <input
+                required
+                id="nome"
+                name="nome"
+                value={nome}
+                onChange={(event) => setNome(event.target.value)}
+                placeholder="Digite seu nome.."
+              />
+            </Nome>
+            <Cpf>
+              <label htmlFor="cpf">CPF do Comprador</label>
+              <input
+                required
+                id="cpf"
+                name="cpf"
+                value={cpf}
+                onChange={(event) => setCpf(event.target.value)}
+                placeholder="Digite seu CPF.."
+              />
+            </Cpf>
+            <Reservar>
+            <Botao type="submit">Reservar Assento(s)</Botao>
+            </Reservar>
+          </Form>
         <Filme>
           <Imagem>
             <img src={movie.posterURL} alt={`imagem do filme ${movie.title}`} />
@@ -98,6 +150,7 @@ const AssentosPage = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 67px;
+  margin-bottom: 120px;
   span {
     font-family: "Roboto", sans-serif;
     font-size: 24px;
@@ -160,7 +213,7 @@ const Lugares = styled.ul`
 const LugarVazio = styled.li`
   width: 26px;
   height: 26px;
-  background: #C3CFD9;
+  background: #c3cfd9;
   border: 1px solid #7b8b99;
   border-radius: 12px;
   font-family: "Roboto", sans-serif;
@@ -171,8 +224,8 @@ const LugarVazio = styled.li`
 const LugarMarcado = styled.li`
   width: 26px;
   height: 26px;
-  background: #1AAE9E;
-  border: 1px solid #0E7D71;
+  background: #1aae9e;
+  border: 1px solid #0e7d71;
   border-radius: 12px;
   font-family: "Roboto", sans-serif;
   text-align: center;
@@ -226,14 +279,21 @@ const BolaCinza = styled.div`
   border-radius: 17px;
 `;
 
-const Inputs = styled.ul`
+const Form = styled.form`
   width: 100%;
   margin: 23px;
+  p {
+    color: #293845;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 8px;
+    font-family: "Roboto", sans-serif;
+  }
 `;
-const Nome = styled.li`
+const Nome = styled.div`
   width: 100%;
   font-size: 18px;
-  margin: 24px 0 12px 0;
+  margin: 12px 0 12px 0;
   p {
     color: #293845;
     align-items: center;
@@ -257,7 +317,7 @@ const Nome = styled.li`
     font-family: "Roboto", sans-serif;
   }
 `;
-const Cpf = styled.li`
+const Cpf = styled.div`
   width: 100%;
   font-size: 18px;
   margin: 12px 0 24px 0;
@@ -284,7 +344,13 @@ const Cpf = styled.li`
     font-family: "Roboto", sans-serif;
   }
 `;
-const Reservar = styled.button`
+
+const Reservar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const Botao = styled.button`
   width: 225px;
   height: 42px;
   background: #e8833a;
