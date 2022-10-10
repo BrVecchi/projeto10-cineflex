@@ -13,8 +13,8 @@ export default function Assentos() {
   const [cpf, setCpf] = useState("");
   const { sessaoId } = useParams();
   const navigate = useNavigate()
-  console.log(nome);
-  console.log(cpf);
+  
+  
 
   useEffect(() => {
     const promise = axios.get(
@@ -58,6 +58,12 @@ export default function Assentos() {
     request.then(()=>{
       alert("Assento reservado!")
       setAssentosMarcados([])
+      localStorage.setItem("nome",nome);
+      localStorage.setItem("cpf",cpf);
+      localStorage.setItem("filme", movie.title);
+      localStorage.setItem("data",`${day.weekday} - ${sessao.name}`);
+      localStorage.setItem("assentos", assentosMarcados.map((seat) => seat.name));
+
       setNome("");
       setCpf("");
       navigate("/sucesso")

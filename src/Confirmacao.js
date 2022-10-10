@@ -1,29 +1,75 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Confirmacao() {
-  return (
+  const [nome, setNome] = useState(undefined);
+  const [cpf, setCpf] = useState(undefined);
+  const [filme, setFilme] = useState(undefined);
+  const [assentos, setAssentos] = useState(undefined);
+  const [data, setData] = useState(undefined);
+  const navigate = useNavigate();
+
+  useEffect ( () => {
+  if (
+    localStorage.getItem("nome") !== undefined &&
+    localStorage.getItem("cpf") !== undefined &&
+    localStorage.getItem("filme") !== undefined &&
+    localStorage.getItem("data") !== undefined &&
+    localStorage.getItem("assentos") !== undefined
+  ) {
+    setNome(localStorage.getItem("nome"));
+    setCpf(localStorage.getItem("cpf"));
+    setFilme(localStorage.getItem("filme"));
+    setData(localStorage.getItem("data"));
+    setAssentos(localStorage.getItem("assentos"));
+  }}, [])
+
+  function voltarParaHome() {
+    localStorage.clear();
+    navigate("/");
+  }
+
+  return nome === undefined ||
+    cpf === undefined ||
+    filme === undefined ||
+    data === undefined ||
+    assentos === undefined ? (
+    <ConfirmacoesPage>
+      <span>Seu pedido ainda não foi efetuado completamente!</span>
+      <ConfirmacoesContainer>
+        <Informacao>
+          <span>Volte para o início e refaça seu pedido..</span>
+        </Informacao>
+      </ConfirmacoesContainer>
+      <Home>
+        <button onClick={voltarParaHome}>Voltar para Home</button>
+      </Home>
+    </ConfirmacoesPage>
+  ) : (
     <ConfirmacoesPage>
       <span>Pedido feito com sucesso!</span>
       <ConfirmacoesContainer>
         <Informacao>
           <span>Filme e sessão</span>
-          <p>Nome do Filme</p>
-          <p>dia e hora</p>
+          <p>{filme}</p>
+          <p>{data}</p>
         </Informacao>
         <Informacao>
           <span>Ingressos</span>
-          <p>assento tal</p>
-          <p>assento tal</p>
+          {assentos.split(",").map((assento) => (
+            <p>Assento {assento}</p>
+          ))}
         </Informacao>
         <Informacao>
           <span>Comprador</span>
-          <p>Nome: nome do comprador</p>
-          <p>CPF: cpf do comprador</p>
+          <p>Nome: {nome}</p>
+          <p>CPF: {cpf}</p>
         </Informacao>
-        <Home>
-          <button>Voltar para Home</button>
-        </Home>
       </ConfirmacoesContainer>
+      <Home>
+        <button onClick={voltarParaHome}>Voltar para Home</button>
+      </Home>
     </ConfirmacoesPage>
   );
 }
