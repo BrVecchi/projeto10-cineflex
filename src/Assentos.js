@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import MaskedInput from "./MaskedInput";
 
 export default function Assentos() {
   const [sessao, setSessao] = useState({});
@@ -121,7 +122,7 @@ export default function Assentos() {
             </Nome>
             <Cpf>
               <label htmlFor="cpf">CPF do Comprador</label>
-              <input
+              <MaskedInput
                 required
                 id="cpf"
                 name="cpf"
