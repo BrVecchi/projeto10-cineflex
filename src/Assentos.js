@@ -56,7 +56,7 @@ export default function Assentos() {
       }
     );
     request.then(()=>{
-      alert("Assento reservado!")
+      alert("Assento(s) reservado(s)!")
       setAssentosMarcados([])
       localStorage.setItem("nome",nome);
       localStorage.setItem("cpf",cpf);
@@ -73,11 +73,15 @@ export default function Assentos() {
     })
   }
 
+  function alertIndisponivel() {
+    alert("Assento indisponível!")
+  }
+
   return (
     <AssentosPage>
       <span>Selecione o(s) Assento(s)</span>
       <AssentosContainer>
-        <Lugares>
+        <Lugares data-identifier="seat">
           {seats.map((seat) =>
             seat.isAvailable ? (
               assentosMarcados.includes(seat) ? (
@@ -90,20 +94,20 @@ export default function Assentos() {
                 </LugarVazio>
               )
             ) : (
-              <LugarOcupado key={seat.id}>{seat.name}</LugarOcupado>
+              <LugarOcupado onClick={alertIndisponivel} key={seat.id}>{seat.name}</LugarOcupado>
             )
           )}
         </Lugares>
         <Legenda>
-          <div>
+          <div data-identifier="seat-selected-subtitle">
             <BolaAzul> </BolaAzul>
             <p>Selecionado</p>
           </div>
-          <div>
+          <div data-identifier="seat-available-subtitle">
             <BolaCinza> </BolaCinza>
             <p>Disponível</p>
           </div>
-          <div>
+          <div data-identifier="seat-unavailable-subtitle">
             <BolaAmarela> </BolaAmarela>
             <p>Indisponível</p>
           </div>
@@ -111,7 +115,7 @@ export default function Assentos() {
           <Form onSubmit={fazerReserva}>
             <Nome>
               <label htmlFor="nome">Nome do Comprador</label>
-              <input
+              <input data-identifier="buyer-name-input"
                 required
                 id="nome"
                 name="nome"
@@ -122,7 +126,7 @@ export default function Assentos() {
             </Nome>
             <Cpf>
               <label htmlFor="cpf">CPF do Comprador</label>
-              <MaskedInput
+              <MaskedInput data-identifier="buyer-cpf-input"
                 required
                 id="cpf"
                 name="cpf"
@@ -132,14 +136,14 @@ export default function Assentos() {
               />
             </Cpf>
             <Reservar>
-            <Botao type="submit">Reservar Assento(s)</Botao>
+            <Botao data-identifier="reservation-btn" type="submit">Reservar Assento(s)</Botao>
             </Reservar>
           </Form>
         <Filme>
           <Imagem>
-            <img src={movie.posterURL} alt={`imagem do filme ${movie.title}`} />
+            <img data-identifier="movie-img-preview" src={movie.posterURL} alt={`imagem do filme ${movie.title}`} />
           </Imagem>
-          <div>
+          <div data-identifier="movie-and-session-infos-preview">
             <p>{movie.title}</p>
             <p>
               {day.weekday} - {sessao.name}

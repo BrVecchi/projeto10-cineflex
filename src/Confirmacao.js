@@ -50,25 +50,25 @@ export default function Confirmacao() {
     <ConfirmacoesPage>
       <span>Pedido feito com sucesso!</span>
       <ConfirmacoesContainer>
-        <Informacao>
+        <Informacao data-identifier="movie-session-infos-reserve-finished">
           <span>Filme e sessão</span>
           <p>{filme}</p>
           <p>{data}</p>
         </Informacao>
-        <Informacao>
+        <Informacao data-identifier="seat-infos-reserve-finished">
           <span>Ingressos</span>
           {assentos.split(",").map((assento, i) => (
             <p key={i}>Assento {assento}</p>
           ))}
         </Informacao>
-        <Informacao>
+        <Informacao data-identifier="buyer-infos-reserve-finished">
           <span>Comprador</span>
           <p>Nome: {nome}</p>
           <p>CPF: {cpf}</p>
         </Informacao>
       </ConfirmacoesContainer>
       <Home>
-        <button onClick={voltarParaHome}>Voltar para Home</button>
+        <button data-identifier="back-to-home-btn" onClick={voltarParaHome}>Voltar para Home</button>
       </Home>
     </ConfirmacoesPage>
   );

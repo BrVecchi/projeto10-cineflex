@@ -27,13 +27,13 @@ export default function Horarios() {
       <span>Selecione o Horário</span>
       <HorariosContainer>
         {days.map((day, i) => (
-          <Horario key={i}>
+          <Horario data-identifier="session-date" key={i}>
             <Data>
               {day.weekday} - {day.date}
             </Data>
             <Horas>
               {day.showtimes.map((showtime, ident) => (
-                <Link key={ident} to={`/sessao/${showtime.id}`}>
+                <Link data-identifier="hour-minute-btn" key={ident} to={`/sessao/${showtime.id}`}>
                 <Hora>{showtime.name}</Hora>
                 </Link>
               ))}
@@ -42,7 +42,7 @@ export default function Horarios() {
         ))}
         <Filme>
           <Imagem>
-            <img src={filme.posterURL} alt={`imagem do filme ${filme.title}`} />
+            <img  src={filme.posterURL} alt={`imagem do filme ${filme.title}`} />
           </Imagem>
           <div>
           <p>{filme.title}</p>

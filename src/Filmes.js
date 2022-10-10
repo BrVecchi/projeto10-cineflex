@@ -18,7 +18,7 @@ export default function Filmes() {
       <span>Selecione o Filme</span>
       <FilmesContainer>
         {filmes.map((filme, i) => 
-        <Filme key={i}>
+        <Filme data-identifier="movie-outdoor" key={i}>
             <Link to={`/filme/${filme.id}`}>
           <img
             src={filme.posterURL}
