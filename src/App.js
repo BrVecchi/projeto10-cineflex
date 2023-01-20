@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useHistory, useLocation, useNavigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import Assentos from "./Assentos";
 import Confirmacao from "./Confirmacao";
 import Filmes from "./Filmes";
